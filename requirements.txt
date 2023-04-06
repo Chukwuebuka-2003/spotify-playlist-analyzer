@@ -1,4 +1,0 @@
-spotipy
-plotly
-plotly.express
-pandas
