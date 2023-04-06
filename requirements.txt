@@ -1,0 +1,8 @@
+spotipy
+plotly
+plotly.express
+pandas
+numpy
+matplotlib
+plotly.io
+plotly.graph_objects
