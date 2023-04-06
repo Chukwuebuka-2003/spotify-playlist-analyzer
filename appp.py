@@ -89,8 +89,7 @@ if playlist_id:
 # display a bar chart of the top 10 most popular artists in the playlist
     st.write("#### Top 10 Artists")
     st.write("The bar chart below shows the top 10 most popular artists in the playlist.")
-    df['Popularity'] = df['Popularity'].astype(float)
-
+    df['Popularity'] = pd.to_numeric(df['Popularity'], errors='coerce')
     top_artists = df.groupby("Artist").mean().sort_values("Popularity", ascending=False).head(10)
     fig_top_artists = px.bar(top_artists, x=top_artists.index, y="Popularity", title="Top 10 Artists")
     st.plotly_chart(fig_top_artists)    
