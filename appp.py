@@ -20,16 +20,28 @@ st.title("Spotify Playlist Analyzer")
 playlist_name = st.sidebar.text_input("Enter the name of the Spotify playlist:")
 
 # search for the playlist ID based on the name
+# Search for the playlist ID and display matching playlists
 if playlist_name:
-    playlists = sp.search(playlist_name, type="playlist")["playlists"]["items"]
+    search_results = sp.search(playlist_name, type="playlist")["playlists"]["items"]
     
-    if playlists:  # Check if playlists list is not empty
-        playlist_id = playlists[0]["id"]
+    if search_results:  # Check if any playlists are found
+        # Display the matching playlists for user selection
+        playlist_options = [f"{playlist['name']} by {playlist['owner']['display_name']}" for playlist in search_results]
+        selected_playlist = st.selectbox("Select a playlist:", playlist_options)
+
+        # Get the playlist ID of the selected playlist
+        selected_index = playlist_options.index(selected_playlist)
+        playlist_id = search_results[selected_index]["id"]
+        playlist_name = search_results[selected_index]["name"]
+
+        # Display the name of the selected playlist
+        st.success(f"Selected Playlist: {playlist_name}")
     else:
         st.error("No playlists found with that name. Please try a different name.")
         playlist_id = None
 else:
     playlist_id = None
+
 
 
 # retrieve data from the Spotify API
