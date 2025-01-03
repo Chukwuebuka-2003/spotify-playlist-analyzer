@@ -134,9 +134,35 @@ if playlist_id:
     st.write("#### Release Date vs. Popularity")
     st.write("The line chart below shows the relationship between track release date and popularity.")
     st.write("It seems that newer tracks are generally more popular than older tracks.")
-    df["Release Year"] = pd.to_datetime(df["Release Date"]).dt.year
-    popularity_by_year = df.groupby("Release Year").mean().reset_index()[["Release Year", "Popularity"]]
-    fig_release_date_popularity = px.line(popularity_by_year, x="Release Year", y="Popularity", title="Release Date vs. Popularity")
+    # Ensure 'Release Date' is in a valid datetime format
+    df["Release Date"] = pd.to_datetime(df["Release Date"], errors="coerce")
+
+# Drop rows with invalid 'Release Date' or 'Popularity'
+    df = df.dropna(subset=["Release Date", "Popularity"])
+
+# Extract the release year
+    df["Release Year"] = df["Release Date"].dt.year
+
+# Ensure 'Popularity' is numeric
+    df["Popularity"] = pd.to_numeric(df["Popularity"], errors="coerce")
+
+# Drop rows with invalid 'Popularity'
+    df = df.dropna(subset=["Popularity"])
+
+# Group by 'Release Year' and calculate average popularity
+    popularity_by_year = (
+        df.groupby("Release Year", as_index=False)["Popularity"]
+        .mean()
+        .sort_values("Release Year")
+    )
+
+# Plot the line chart
+    fig_release_date_popularity = px.line(
+        popularity_by_year,
+        x="Release Year",
+        y="Popularity",
+        title="Release Date vs. Popularity"
+    )
     st.plotly_chart(fig_release_date_popularity)
 
     # perform a bivariate analysis of popularity vs. release year and duration vs. release year
