@@ -128,7 +128,7 @@ if playlist_id:
     fig_top_songs = px.bar(top_songs, x="Name", y="Popularity", title="Top 10 Songs")
 
 
-    st.plotly_chart(fig_top_artistss)    
+    st.plotly_chart(fig_top_songs)    
 
     # display a line chart of track release date vs. popularity
     st.write("#### Release Date vs. Popularity")
