@@ -22,25 +22,35 @@ playlist_name = st.sidebar.text_input("Enter the name of the Spotify playlist:")
 # search for the playlist ID based on the name
 # Search for the playlist ID and display matching playlists
 if playlist_name:
-    search_results = sp.search(playlist_name, type="playlist")["playlists"]["items"]
-    
-    if search_results:  # Check if any playlists are found
-        # Display the matching playlists for user selection
-        playlist_options = [f"{playlist['name']} by {playlist['owner']['display_name']}" for playlist in search_results]
-        selected_playlist = st.selectbox("Select a playlist:", playlist_options)
+    try:
+        # Perform the search query
+        search_response = sp.search(playlist_name, type="playlist")
+        search_results = search_response.get("playlists", {}).get("items", [])
+        
+        if search_results:  # Check if any playlists are found
+            # Display the matching playlists for user selection
+            playlist_options = [
+                f"{playlist['name']} by {playlist['owner']['display_name']}" for playlist in search_results
+            ]
+            selected_playlist = st.selectbox("Select a playlist:", playlist_options)
 
-        # Get the playlist ID of the selected playlist
-        selected_index = playlist_options.index(selected_playlist)
-        playlist_id = search_results[selected_index]["id"]
-        playlist_name = search_results[selected_index]["name"]
+            # Get the playlist ID of the selected playlist
+            selected_index = playlist_options.index(selected_playlist)
+            playlist_id = search_results[selected_index]["id"]
+            playlist_name = search_results[selected_index]["name"]
 
-        # Display the name of the selected playlist
-        st.success(f"Selected Playlist: {playlist_name}")
-    else:
-        st.error("No playlists found with that name. Please try a different name.")
+            # Display the name of the selected playlist
+            st.success(f"Selected Playlist: {playlist_name}")
+        else:
+            st.error("No playlists found with that name. Please try a different name.")
+            playlist_id = None
+    except Exception as e:
+        # Handle any API or data errors gracefully
+        st.error(f"An error occurred: {str(e)}")
         playlist_id = None
 else:
     playlist_id = None
+
 
 
 
