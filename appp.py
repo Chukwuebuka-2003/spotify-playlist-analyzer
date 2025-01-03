@@ -42,15 +42,26 @@ if playlist_id:
     track_release_date = [track["track"]["album"]["release_date"] for track in tracks]
 
     # display the playlist data in a table
+    # Create a DataFrame with the playlist data
+    playlist_data = {
+        "Name": track_names,
+        "Artist": track_artists,
+        "Album": track_album,
+        "Release Date": track_release_date,
+        "Popularity": track_popularity,
+        "Duration (ms)": track_duration,
+    }
+
+    df = pd.DataFrame(playlist_data)
+
+# Display playlist details and DataFrame
     st.write(f"## {playlist['name']}")
     st.write(f"**Description:** {playlist['description']}")
     st.write(f"**Number of tracks:** {len(tracks)}")
     st.write("")
+
     st.write("### Tracklist")
-    st.write("| Name | Artist | Album | Release Date | Popularity | Duration (ms) |")
-    st.write("| ---- | ------ | ----- | ------------ | ---------- | -------------- |")
-    for i in range(len(tracks)):
-        st.write(f"| {track_names[i]} | {track_artists[i]} | {track_album[i]} | {track_release_date[i]} | {track_popularity[i]} | {track_duration[i]} |")
+    st.dataframe(df)
 
     # analyze the playlist data
     st.write("")
