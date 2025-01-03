@@ -22,13 +22,15 @@ playlist_name = st.sidebar.text_input("Enter the name of the Spotify playlist:")
 # search for the playlist ID based on the name
 if playlist_name:
     playlists = sp.search(playlist_name, type="playlist")["playlists"]["items"]
-    if playlists:
+    
+    if playlists:  # Check if playlists list is not empty
         playlist_id = playlists[0]["id"]
     else:
-        st.write("No playlists found with that name.")
+        st.error("No playlists found with that name. Please try a different name.")
         playlist_id = None
 else:
     playlist_id = None
+
 
 # retrieve data from the Spotify API
 if playlist_id:
