@@ -110,8 +110,24 @@ if playlist_id:
 # display a bar chart of the top 10 most popular songs in the playlist
     st.write("#### Top 10 Songs")
     st.write("The bar chart below shows the top 10 most popular songs in the playlist.")
-    top_artistss = df.groupby("Name").mean().sort_values("Popularity", ascending=False).head(10)
-    fig_top_artistss = px.bar(top_artistss, x=top_artistss.index, y="Popularity", title="Top 10 Songs")
+    # Ensure 'Popularity' is numeric
+    df['Popularity'] = pd.to_numeric(df['Popularity'], errors='coerce')
+
+# Drop rows with invalid 'Popularity'
+    df = df.dropna(subset=['Popularity'])
+
+# Group by 'Name' and calculate the top 10 by average popularity
+    top_songs = (
+        df.groupby("Name", as_index=False)["Popularity"]
+        .mean()
+        .sort_values("Popularity", ascending=False)
+        .head(10)
+    )
+
+# Plot the bar chart
+    fig_top_songs = px.bar(top_songs, x="Name", y="Popularity", title="Top 10 Songs")
+
+
     st.plotly_chart(fig_top_artistss)    
 
     # display a line chart of track release date vs. popularity
