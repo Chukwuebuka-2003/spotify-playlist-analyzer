@@ -4,5 +4,5 @@ plotly.express
 pandas
 numpy
 matplotlib
-plotly.io
+plotly
 plotly.graph_objects
