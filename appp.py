@@ -8,8 +8,8 @@ from datetime import datetime
 
 
 # authenticate the Spotify API with your client ID and client secret
-client_id = "dd6b3d9b8e6644ca80a399ff7e8d5a6e"
-client_secret = "4594fd9a71014bcd87bcf87d2cef5148"
+client_id = st.secrets["spotify"]["client_id"]
+client_secret = st.secrets["spotify"]["client_secret"]
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
